@@ -74,11 +74,11 @@ export async function smtpValidate(email: string): Promise<boolean> {
       console.log("SMTP Response:", strData);
 
       if (step === 0 && strData.startsWith("220")) {
-        socket.write(`HELO api.validlyapi.com\r\n`);
+        socket.write(`HELO validator.validlyapi.com\r\n`);
         step = 1;
       }
       else if (step === 1 && strData.startsWith("250")) {
-        socket.write(`MAIL FROM:<validator@validlyapi.com>\r\n`);
+        socket.write(`MAIL FROM:<check@validator.validlyapi.com>\r\n`);
         step = 2;
       }
       else if (step === 2 && strData.startsWith("250")) {

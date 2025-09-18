@@ -1,0 +1,30 @@
+nano ~/deploy.sh
+~/deploy.sh
+
+
+#!/bin/bash
+set -e
+
+APP_DIR="/root/validator.validlyapi.com"
+CONTAINER_NAME="bulk-validator-api"
+IMAGE_NAME="bulk-validator-api:latest"
+
+cd $APP_DIR
+
+echo " ^=^s  Pulling latest changes..."
+git pull origin main
+
+echo " ^=^p  Building Docker image..."
+docker build -t $IMAGE_NAME .
+
+echo " ^=^{^q Stopping old container (if exists)..."
+docker stop $CONTAINER_NAME || true
+docker rm $CONTAINER_NAME || true
+
+echo " ^=^z^` Starting new container..."
+docker run -d \
+  --name $CONTAINER_NAME \
+  -p 3000:3000 \
+  $IMAGE_NAME
+
+echo " ^|^e Deployment complete!"
